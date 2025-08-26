@@ -50,5 +50,7 @@ posts = [
 # Create your views here.
 def index(request):
     template = 'blog/index.html'
-    context = {'posts': posts}
+    copy = posts[:]
+    copy.reverse()
+    context = {'posts': copy}
     return render(request, template, context)
