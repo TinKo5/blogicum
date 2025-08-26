@@ -58,7 +58,7 @@
             </ul>          
             <!-- Первые 10 слов -->
             <p>
-              {{ post.text }}
+              {{ post.text|truncatewords:10 }}
             </p>
             <a href="detail.html">Читать полный текст</a>
           </article>
