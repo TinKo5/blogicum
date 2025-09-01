@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from django.http import HttpResponse
+from django.http import HttpResponseNotFound
 
 
 posts = [
@@ -47,10 +47,19 @@ posts = [
 ]
 
 
-# Create your views here.
-def index(request):
-    template = 'blog/index.html'
-    copy = posts[:]
-    copy.reverse()
-    context = {'posts': copy}
-    return render(request, template, context)
+def index(request):  # Функции index принимает параметр request (запрос от пользователя).
+    template = 'blog/index.html'  # Шаблон index.html, расположенный в директории blog будет использоваться для отображения списка постов.
+    copy = posts[:]  # Копия списка posts (делается с помощью среза [:]) для того, чтобы не изменять оригинальный список posts.
+    copy.reverse()  # Список copy переворачивается с помощью reverse(), так что посты будут отображаться в обратном порядке.
+    context = {'posts': copy}  # Cоздаётся словарь context, который будет передан в шаблон. В этом словаре ключ 'posts' сопоставляется с копией списка постов copy. Сontext должен быть всегда словарем. 
+    return render(request, template, context)  #  Вызывается функция render, которая рендерит шаблон template с контекстом context и возвращает результат в виде HTTP-ответа.
+
+
+def post_detail(request, id):
+    template = 'blog/detail.html'
+    for post in posts:
+        if post['id'] == id:
+            context = {'post': post}  # Cоздаётся словарь context, который будет передан в шаблон. В этом словаре ключ 'post' сопоставляется с текущим постом (post). Сontext должен быть всегда словарем. 
+            return render(request, template, context)
+    return HttpResponseNotFound('Пост не найден')  # Если цикл завершился и пост с указанным идентификатором не был найден, возвращается ответ с кодом 404 и сообщением «Пост не найден».
+ 
